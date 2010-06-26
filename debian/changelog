@@ -1,0 +1,12 @@
+tuquitup (4.0-2) lucid; urgency=low
+
+  * Nuevas funciones de actualización
+  * Mejor manejo de recursos
+
+ -- Mario Colque <mario@tuquito.org.ar>  Sat, 26 Jun 2010 12:13:48 -0300
+
+tuquitup (4.0-1) lucid; urgency=low
+
+  * Versión inicial
+
+ -- Mario Colque <mario@tuquito.org.ar>  Tue, 22 Jun 2010 21:40:30 -0300

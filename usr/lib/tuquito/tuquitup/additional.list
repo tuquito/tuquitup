@@ -1,0 +1,12 @@
+tuquito-info-main-64	deinstall
+tuquito-info-main-32	deinstall
+tuquito-gnome-themes	deinstall
+medibuntu-keyring	install
+tuquito-info-32		install
+tuquito-info-64		install
+tuquito-minimal		install
+tuquito-gnome		install
+tuquito-gnome-themes	install
+tuquito-control-center	install
+tuquito-software-properties	install
+

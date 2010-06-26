@@ -1,0 +1,13 @@
+Source: tuquitup
+Section: admin
+Priority: extra
+Maintainer: Mario Colque <mario@tuquito.org.ar>
+Build-Depends: debhelper (>= 7)
+Standards-Version: 3.8.3
+
+Package: tuquitup
+Architecture: all
+Depends: synaptic, gksu
+Description: Actualizador de Tuquito
+ Realiza las tareas administrativas de actualización a la nueva versión de Tuquito
+ * Tuquito Team! - 2010

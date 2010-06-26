@@ -1,0 +1,3 @@
+#!/bin/bash
+gksu /usr/lib/tuquito/tuquitup/tuquitup -D 'TuquitUP' &
+exit 0
