@@ -225,6 +225,9 @@
     <property name="type_hint">normal</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">warning</property>
+    <property name="use_markup">True</property>
+    <property name="secondary_text" translatable="yes">&lt;b&gt;Hola&lt;/b&gt;</property>
+    <property name="secondary_use_markup">True</property>
     <signal name="close" handler="quit"/>
     <signal name="delete_event" handler="quit"/>
     <child internal-child="vbox">
