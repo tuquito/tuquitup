@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TuquitUP 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-26 14:42-0300\n"
+"POT-Creation-Date: 2010-06-29 23:48-0300\n"
 "PO-Revision-Date: 2010-06-26 11:43-0300\n"
 "Last-Translator: Mario Colque <mario@tuquito.org.ar>\n"
 "Language-Team: Spanish\n"
@@ -61,7 +61,7 @@ msgstr ""
 
 #: usr/lib/tuquito/tuquitup/tuquitup:196
 msgid "It's ok, I know what I'm doing!"
-msgstr "Está bien, sé lo que estoy haciendo!"
+msgstr "¡Está bien, sé lo que estoy haciendo!"
 
 #: usr/lib/tuquito/tuquitup/tuquitup:197
 msgid "Making backups of the files which will be overwritten"

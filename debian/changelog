@@ -1,3 +1,9 @@
+tuquitup (4.0-4.3) lucid; urgency=low
+
+  * Revisión de idiomas
+
+ -- Mario Colque <mario@tuquito.org.ar>  Tue, 29 Jun 2010 23:53:29 -0300
+
 tuquitup (4.0-4.2) lucid; urgency=low
 
   * Idioma PT agregado
