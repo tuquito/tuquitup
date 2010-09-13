@@ -1,3 +1,14 @@
+tuquitup (4.0-5) lucid; urgency=low
+
+  * version identification
+  * new translations
+  * new icon
+  * new additional.list
+  * launcher fixed
+  * new sources.list for LXDE edition
+
+ -- Mario Colque <mario@tuquito.org.ar>  Mon, 13 Sep 2010 14:49:01 -0300
+
 tuquitup (4.0-4.3) lucid; urgency=low
 
   * Revisión de idiomas
