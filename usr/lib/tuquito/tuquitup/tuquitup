@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
- Tuquito Upgrade Progress 4.0
+ Tuquito Upgrade Progress 4.0-2
  Copyright (C) 2010
  Author: Mario Colque <mario@tuquito.org.ar>
  Tuquito Team! - www.tuquito.org.ar
@@ -19,8 +19,7 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 """
 
-import gtk, pygtk
-pygtk.require('2.0')
+import gtk
 import os, commands, threading, gettext
 from time import sleep
 
@@ -36,7 +35,7 @@ class MessageDialog:
 	def show(self):
 		dialog = gtk.MessageDialog(None, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, self.style, gtk.BUTTONS_OK, self.message)
 		dialog.set_icon_from_file('/usr/lib/tuquito/tuquitup/logo.png')
-		dialog.set_title('TuquitUP')
+		dialog.set_title(_('TuquitUP'))
 		dialog.set_position(gtk.WIN_POS_CENTER)
 		dialog.run()
 		dialog.destroy()
@@ -54,8 +53,8 @@ class mainWindow(threading.Thread):
 
 	def run(self):
 		try:
+			myEdition = commands.getoutput('cat /etc/tuquito/info | grep EDITION').split('=')[1].replace('"', '')
 			self.newThread(self.pulse)
-
 			gtk.gdk.threads_enter()
 			self.glade.get_object('window').window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 			self.glade.get_object('image1').set_from_stock(gtk.STOCK_REFRESH,4)
@@ -77,7 +76,10 @@ class mainWindow(threading.Thread):
 			gtk.gdk.threads_leave()
 
 			#Step 2 Upgrade Ubuntu base
-			os.system('gksu cp /usr/lib/tuquito/tuquitup/sources.list /etc/apt/sources.list')
+			if myEdition == 'LXDE':
+				os.system('gksu cp /usr/lib/tuquito/tuquitup/sources.list /etc/apt/sources.list')
+			else:
+				os.system('gksu cp /usr/lib/tuquito/tuquitup/sources-lxde.list /etc/apt/sources.list')
 			os.system('gksu cp /usr/lib/tuquito/tuquitup/preferences /etc/apt/preferences')
 			os.system('gksu cp /usr/lib/tuquito/tuquitup/apt.conf /etc/apt/apt.conf')
 			os.system('gksu "synaptic --non-interactive --hide-main-window --update-at-startup --upgrade-mode --parent-window-id ' + self.socketId + '" -D "TuquitUP"')
@@ -89,11 +91,14 @@ class mainWindow(threading.Thread):
 			gtk.gdk.threads_leave()
 
 			#Step 3 Install additional tuquito packages
-			desktopBase = commands.getoutput('dpkg --get-selections | grep install | cut -f1 | egrep -x "tuquito-desktop-base"')
-			desktopMain = commands.getoutput('dpkg --get-selections | grep install | cut -f1 | egrep -x "tuquito-desktop-main"')
-			if desktopBase == '' and desktopMain == '':
-				os.system('gksu "echo tuquito-desktop-main >> /usr/lib/tuquito/tuquitup/additional.list"')
-			os.system('gksu "synaptic --non-interactive --hide-main-window --set-selections-file /usr/lib/tuquito/tuquitup/additional.list --parent-window-id ' + self.socketId + '" -D "TuquitUP"')
+			if myEdition == 'LXDE':
+				pass
+			else:
+				desktopBase = commands.getoutput('dpkg --get-selections | grep install | cut -f1 | egrep -x "tuquito-desktop-base"')
+				desktopMain = commands.getoutput('dpkg --get-selections | grep install | cut -f1 | egrep -x "tuquito-desktop-main"')
+				if desktopBase == '' and desktopMain == '':
+					os.system('gksu "echo tuquito-desktop-main >> /usr/lib/tuquito/tuquitup/additional.list"')
+				os.system('gksu "synaptic --non-interactive --hide-main-window --set-selections-file /usr/lib/tuquito/tuquitup/additional.list --parent-window-id ' + self.socketId + '" -D "TuquitUP"')
 			os.system('gksu "synaptic --non-interactive --hide-main-window --update-at-startup --parent-window-id ' + self.socketId + '" -D "TuquitUP"')
 
 			gtk.gdk.threads_enter()
@@ -131,7 +136,8 @@ class mainWindow(threading.Thread):
 			gtk.gdk.threads_leave()
 
 			#Step 7 configure gconf
-			os.system('gksu /usr/lib/tuquito/tuquitup/gconf.sh')
+			if myEdition != 'LXDE':
+				os.system('gksu /usr/lib/tuquito/tuquitup/gconf.sh')
 
 			gtk.gdk.threads_enter()
 			self.glade.get_object('image7').set_from_stock(gtk.STOCK_YES,4)
@@ -150,17 +156,16 @@ class mainWindow(threading.Thread):
 
 			self.quit = True
 
-			gtk.gdk.threads_enter()			
+			gtk.gdk.threads_enter()
 			message = MessageDialog(_('Upgrade finished'), _("The upgrade process is finished, please reboot your computer. If you've seen error messages you can run this tool again or seek help from the forums."), gtk.MESSAGE_INFO)
-	    		message.show()			
-			gtk.gdk.threads_leave()	
+	    		message.show()
+			gtk.gdk.threads_leave()
 
 			self.quitStop(self)
 		except Exception, detail:
 			self.quit = True
-			print detail
 			msg = MessageDialog(_('Error'), _('An error occurred during the upgrade: ') + str(detail), gtk.MESSAGE_ERROR)
-	    		msg.show()	
+	    		msg.show()
 
 	def pulse(self):
 		while not self.quit:
@@ -189,7 +194,7 @@ class warningWindow:
 		self.glade.get_object('ok').connect('clicked', self.confirm)
 		self.glade.get_object('warning').set_markup('<big><b>' + _('Read this first:') + '</b></big>')
 
-		self.glade.get_object('warning').format_secondary_markup(_("The recommended way to install Tuquito 4 is to download the ISO and to perform a fresh install.\nThis tool allows you to upgrade an already installed Tuquito 4 (alpha or beta) system to Tuquito 4 (stable). It is <b>risky</b> and depending on your configuration it might or <b>might not work</b>.\nBackup your data.\nGood luck and if you make it all the way, enjoy <b>Tuquito 4 Toba</b>!"))
+		self.glade.get_object('warning').format_secondary_markup(_("The recommended way to install Tuquito 4.1 is to download the ISO and to perform a fresh install.\nThis tool allows you to upgrade an already installed Tuquito 4 system to Tuquito 4.1 (alpha). It is <b>risky</b> and depending on your configuration it might or <b>might not work</b>.\nBackup your data.\nGood luck and if you make it all the way, enjoy <b>Tuquito 4.1 Wichi</b>!"))
 		self.glade.get_object('warning').set_title('TuquitUP')
 
 		#i18n
@@ -209,7 +214,6 @@ class warningWindow:
 		self.vbox.pack_start(socket)
 		socket.show()
 		self.socketId = repr(socket.get_id())
-
 		upgrade = mainWindow(self.glade, self.socketId)
 		upgrade.start()
 
@@ -217,3 +221,4 @@ if __name__ == '__main__':
 	gtk.gdk.threads_init()
 	gui = warningWindow()
 	gtk.main()
+

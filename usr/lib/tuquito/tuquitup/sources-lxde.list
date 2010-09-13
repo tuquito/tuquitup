@@ -1,7 +1,7 @@
-## Repositorios oficiales de Tuquito
-deb http://ppa.launchpad.net/paquetes-tuquito/main/ubuntu maverick main
-deb http://ppa.launchpad.net/paquetes-tuquito/update/ubuntu maverick main #Actualizaciones
-deb http://ppa.launchpad.net/paquetes-tuquito/import/ubuntu maverick main #Paquetes importados
+## Repositorios oficiales de Tuquito LXDE
+deb http://ppa.launchpad.net/paquetes-tuquito/lxde-main/ubuntu maverick main 
+deb http://ppa.launchpad.net/paquetes-tuquito/lxde-update/ubuntu maverick main #Actualizaciones
+deb http://ppa.launchpad.net/paquetes-tuquito/lxde-import/ubuntu maverick main #Paquetes importados
 #deb http://ppa.launchpad.net/paquetes-tuquito/unstable/ubuntu maverick main #Paquetes en estado "beta"
 
 ## Repositorios de Ubuntu maverick meerkat
@@ -12,3 +12,6 @@ deb http://archive.ubuntu.com/ubuntu maverick-security main restricted universe 
 
 ## Repositorios de Canonical
 deb http://archive.canonical.com/ubuntu maverick partner #Canonical
+
+## Repositorios de Lubuntu
+deb http://ppa.launchpad.net/lubuntu-desktop/ppa/ubuntu maverick main
