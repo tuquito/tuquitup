@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TuquitUP 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-29 23:48-0300\n"
+"POT-Creation-Date: 2010-09-13 14:41-0300\n"
 "PO-Revision-Date: 2010-06-26 11:56-0300\n"
 "Last-Translator: Carlos Felipe P. de Araújo <carlosfelipe@tuquito.org.ar>\n"
 "Language-Team: Portuguese\n"
@@ -16,11 +16,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: usr/lib/tuquito/tuquitup/tuquitup:154
+#: usr/lib/tuquito/tuquitup/tuquitup:38
+msgid "TuquitUP"
+msgstr ""
+
+#: usr/lib/tuquito/tuquitup/tuquitup:160
 msgid "Upgrade finished"
 msgstr "Atualização concluída"
 
-#: usr/lib/tuquito/tuquitup/tuquitup:154
+#: usr/lib/tuquito/tuquitup/tuquitup:160
 msgid ""
 "The upgrade process is finished, please reboot your computer. If you've seen "
 "error messages you can run this tool again or seek help from the forums."
@@ -29,68 +33,68 @@ msgstr ""
 "computador. Se você viu alguma mensagem de erro, você pode rodar este "
 "aplicativo novamente ou buscar ajuda nos fóruns."
 
-#: usr/lib/tuquito/tuquitup/tuquitup:162
+#: usr/lib/tuquito/tuquitup/tuquitup:167
 msgid "Error"
 msgstr "Erro"
 
-#: usr/lib/tuquito/tuquitup/tuquitup:162
+#: usr/lib/tuquito/tuquitup/tuquitup:167
 msgid "An error occurred during the upgrade: "
 msgstr "Um erro surgiu durante a atualização: "
 
-#: usr/lib/tuquito/tuquitup/tuquitup:190
+#: usr/lib/tuquito/tuquitup/tuquitup:195
 msgid "Read this first:"
 msgstr "Leia isto primeiro:"
 
-#: usr/lib/tuquito/tuquitup/tuquitup:192
+#: usr/lib/tuquito/tuquitup/tuquitup:197
 msgid ""
-"The recommended way to install Tuquito 4 is to download the ISO and to "
+"The recommended way to install Tuquito 4.1 is to download the ISO and to "
 "perform a fresh install.\n"
-"This tool allows you to upgrade an already installed Tuquito 4 (alpha or "
-"beta) system to Tuquito 4 (stable). It is <b>risky</b> and depending on your "
-"configuration it might or <b>might not work</b>.\n"
+"This tool allows you to upgrade an already installed Tuquito 4 system to "
+"Tuquito 4.1 (alpha). It is <b>risky</b> and depending on your configuration "
+"it might or <b>might not work</b>.\n"
 "Backup your data.\n"
-"Good luck and if you make it all the way, enjoy <b>Tuquito 4 Toba</b>!"
+"Good luck and if you make it all the way, enjoy <b>Tuquito 4.1 Wichi</b>!"
 msgstr ""
-"A maneira recomendada de instalar o Tuquito 4 é baixando a ISO e fazer uma "
+"A maneira recomendada de instalar o Tuquito 4.1 é baixando a ISO e fazer uma "
 "instalação nova.\n"
-"Esta ferramenta lhe permite atualizar uma versão do Tuquito 4 (alpha ou "
-"beta) para o Tuquito 4 (stable). Isto é <b>arriscado</b> e depende da sua "
+"Esta ferramenta lhe permite atualizar uma versão do Tuquito 4"
+" para o Tuquito 4.1 (alpha). Isto é <b>arriscado</b> e depende da sua "
 "configuração parar funcionar ou <b>não funcionar</b>.\n"
 "Faça uma cópia de segurança dos seus dados.\n"
 "Boa sorte!"
 
-#: usr/lib/tuquito/tuquitup/tuquitup:196
+#: usr/lib/tuquito/tuquitup/tuquitup:201
 msgid "It's ok, I know what I'm doing!"
 msgstr "Está bem, eu sei o que estou fazendo!"
 
-#: usr/lib/tuquito/tuquitup/tuquitup:197
+#: usr/lib/tuquito/tuquitup/tuquitup:202
 msgid "Making backups of the files which will be overwritten"
 msgstr "Fazendo cópia dos arquivos que serão sobre-escritos"
 
-#: usr/lib/tuquito/tuquitup/tuquitup:198
+#: usr/lib/tuquito/tuquitup/tuquitup:203
 msgid "Upgrading base"
 msgstr "Atualizando a base"
 
-#: usr/lib/tuquito/tuquitup/tuquitup:199
+#: usr/lib/tuquito/tuquitup/tuquitup:204
 msgid "Installing additional packages"
 msgstr "Instalando pacotes adicionais"
 
-#: usr/lib/tuquito/tuquitup/tuquitup:200
+#: usr/lib/tuquito/tuquitup/tuquitup:205
 msgid "Performing an APT dist-upgrade"
 msgstr "Executando um APT dist-upgrade"
 
-#: usr/lib/tuquito/tuquitup/tuquitup:201
+#: usr/lib/tuquito/tuquitup/tuquitup:206
 msgid "Ensuring all upgrades are applied"
 msgstr "Assegurando que todas as atualizações sejam aplicadas"
 
-#: usr/lib/tuquito/tuquitup/tuquitup:202
+#: usr/lib/tuquito/tuquitup/tuquitup:207
 msgid "Adjusting post-upgrade system"
 msgstr "Ajustando o sistema"
 
-#: usr/lib/tuquito/tuquitup/tuquitup:203
+#: usr/lib/tuquito/tuquitup/tuquitup:208
 msgid "Configuring GConf"
 msgstr "Configurando GConf"
 
-#: usr/lib/tuquito/tuquitup/tuquitup:204
+#: usr/lib/tuquito/tuquitup/tuquitup:209
 msgid "Cleaning up"
 msgstr "Limpando"

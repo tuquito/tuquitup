@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-29 23:48-0300\n"
+"POT-Creation-Date: 2010-09-13 14:41-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,71 +16,75 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: usr/lib/tuquito/tuquitup/tuquitup:154
+#: usr/lib/tuquito/tuquitup/tuquitup:38
+msgid "TuquitUP"
+msgstr ""
+
+#: usr/lib/tuquito/tuquitup/tuquitup:160
 msgid "Upgrade finished"
 msgstr ""
 
-#: usr/lib/tuquito/tuquitup/tuquitup:154
+#: usr/lib/tuquito/tuquitup/tuquitup:160
 msgid ""
 "The upgrade process is finished, please reboot your computer. If you've seen "
 "error messages you can run this tool again or seek help from the forums."
 msgstr ""
 
-#: usr/lib/tuquito/tuquitup/tuquitup:162
+#: usr/lib/tuquito/tuquitup/tuquitup:167
 msgid "Error"
 msgstr ""
 
-#: usr/lib/tuquito/tuquitup/tuquitup:162
+#: usr/lib/tuquito/tuquitup/tuquitup:167
 msgid "An error occurred during the upgrade: "
 msgstr ""
 
-#: usr/lib/tuquito/tuquitup/tuquitup:190
+#: usr/lib/tuquito/tuquitup/tuquitup:195
 msgid "Read this first:"
 msgstr ""
 
-#: usr/lib/tuquito/tuquitup/tuquitup:192
-msgid ""
-"The recommended way to install Tuquito 4 is to download the ISO and to "
-"perform a fresh install.\n"
-"This tool allows you to upgrade an already installed Tuquito 4 (alpha or "
-"beta) system to Tuquito 4 (stable). It is <b>risky</b> and depending on your "
-"configuration it might or <b>might not work</b>.\n"
-"Backup your data.\n"
-"Good luck and if you make it all the way, enjoy <b>Tuquito 4 Toba</b>!"
-msgstr ""
-
-#: usr/lib/tuquito/tuquitup/tuquitup:196
-msgid "It's ok, I know what I'm doing!"
-msgstr ""
-
 #: usr/lib/tuquito/tuquitup/tuquitup:197
-msgid "Making backups of the files which will be overwritten"
-msgstr ""
-
-#: usr/lib/tuquito/tuquitup/tuquitup:198
-msgid "Upgrading base"
-msgstr ""
-
-#: usr/lib/tuquito/tuquitup/tuquitup:199
-msgid "Installing additional packages"
-msgstr ""
-
-#: usr/lib/tuquito/tuquitup/tuquitup:200
-msgid "Performing an APT dist-upgrade"
+msgid ""
+"The recommended way to install Tuquito 4.1 is to download the ISO and to "
+"perform a fresh install.\n"
+"This tool allows you to upgrade an already installed Tuquito 4 system to "
+"Tuquito 4.1 (alpha). It is <b>risky</b> and depending on your configuration "
+"it might or <b>might not work</b>.\n"
+"Backup your data.\n"
+"Good luck and if you make it all the way, enjoy <b>Tuquito 4.1 Wichi</b>!"
 msgstr ""
 
 #: usr/lib/tuquito/tuquitup/tuquitup:201
-msgid "Ensuring all upgrades are applied"
+msgid "It's ok, I know what I'm doing!"
 msgstr ""
 
 #: usr/lib/tuquito/tuquitup/tuquitup:202
-msgid "Adjusting post-upgrade system"
+msgid "Making backups of the files which will be overwritten"
 msgstr ""
 
 #: usr/lib/tuquito/tuquitup/tuquitup:203
-msgid "Configuring GConf"
+msgid "Upgrading base"
 msgstr ""
 
 #: usr/lib/tuquito/tuquitup/tuquitup:204
+msgid "Installing additional packages"
+msgstr ""
+
+#: usr/lib/tuquito/tuquitup/tuquitup:205
+msgid "Performing an APT dist-upgrade"
+msgstr ""
+
+#: usr/lib/tuquito/tuquitup/tuquitup:206
+msgid "Ensuring all upgrades are applied"
+msgstr ""
+
+#: usr/lib/tuquito/tuquitup/tuquitup:207
+msgid "Adjusting post-upgrade system"
+msgstr ""
+
+#: usr/lib/tuquito/tuquitup/tuquitup:208
+msgid "Configuring GConf"
+msgstr ""
+
+#: usr/lib/tuquito/tuquitup/tuquitup:209
 msgid "Cleaning up"
 msgstr ""
