@@ -1,9 +1,5 @@
 tuquito-gnome-themes	deinstall
 software-center		deinstall
-medibuntu-keyring	install
 tuquito-minimal		install
-tuquito-gnome		install
-tuquito-gnome-themes	install
 tuquito-control-center	install
-tuquito-software-properties	install
 tuquito-software-manager	install
