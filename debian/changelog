@@ -1,3 +1,12 @@
+tuquitup (4.1-1) maverick; urgency=low
+
+  * new version for maverick
+  * new options for LXDE edition
+  * new icon
+  * new package selection
+
+ -- Mario Colque <mario@tuquito.org.ar>  Fri, 17 Sep 2010 14:39:30 -0300
+
 tuquitup (4.0-5) lucid; urgency=low
 
   * version identification
