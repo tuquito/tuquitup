@@ -77,9 +77,9 @@ class mainWindow(threading.Thread):
 
 			#Step 2 Upgrade Ubuntu base
 			if myEdition == 'LXDE':
-				os.system('gksu cp /usr/lib/tuquito/tuquitup/sources.list /etc/apt/sources.list')
-			else:
 				os.system('gksu cp /usr/lib/tuquito/tuquitup/sources-lxde.list /etc/apt/sources.list')
+			else:
+				os.system('gksu cp /usr/lib/tuquito/tuquitup/sources.list /etc/apt/sources.list')
 			os.system('gksu cp /usr/lib/tuquito/tuquitup/preferences /etc/apt/preferences')
 			os.system('gksu cp /usr/lib/tuquito/tuquitup/apt.conf /etc/apt/apt.conf')
 			os.system('gksu "synaptic --non-interactive --hide-main-window --update-at-startup --upgrade-mode --parent-window-id ' + self.socketId + '" -D "TuquitUP"')
@@ -92,13 +92,19 @@ class mainWindow(threading.Thread):
 
 			#Step 3 Install additional tuquito packages
 			if myEdition == 'LXDE':
-				pass
+				desktopBase = commands.getoutput('dpkg --get-selections | grep install | cut -f1 | egrep -x "tuquito-desktop-lxde-base"')
+				desktopMain = commands.getoutput('dpkg --get-selections | grep install | cut -f1 | egrep -x "tuquito-desktop-lxde"')
+				desktopB = 'tuquito-desktop-lxde-base'
+				desktopM = 'tuquito-desktop-lxde'
 			else:
 				desktopBase = commands.getoutput('dpkg --get-selections | grep install | cut -f1 | egrep -x "tuquito-desktop-base"')
 				desktopMain = commands.getoutput('dpkg --get-selections | grep install | cut -f1 | egrep -x "tuquito-desktop-main"')
-				if desktopBase == '' and desktopMain == '':
-					os.system('gksu "echo tuquito-desktop-main >> /usr/lib/tuquito/tuquitup/additional.list"')
-				os.system('gksu "synaptic --non-interactive --hide-main-window --set-selections-file /usr/lib/tuquito/tuquitup/additional.list --parent-window-id ' + self.socketId + '" -D "TuquitUP"')
+				desktopB = 'tuquito-desktop-base'
+				desktopM = 'tuquito-desktop-main'
+			if desktopBase == '' or desktopMain == '':
+				os.system('gksu "echo ' + desktopB + ' >> /usr/lib/tuquito/tuquitup/additional.list"')
+				os.system('gksu "echo ' + desktopM + ' >> /usr/lib/tuquito/tuquitup/additional.list"')
+			os.system('gksu "synaptic --non-interactive --hide-main-window --set-selections-file /usr/lib/tuquito/tuquitup/additional.list --parent-window-id ' + self.socketId + '" -D "TuquitUP"')
 			os.system('gksu "synaptic --non-interactive --hide-main-window --update-at-startup --parent-window-id ' + self.socketId + '" -D "TuquitUP"')
 
 			gtk.gdk.threads_enter()
