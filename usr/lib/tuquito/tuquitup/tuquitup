@@ -20,211 +20,212 @@
 """
 
 import gtk
-import os, commands, threading, gettext
+import os
+import commands
+import threading
+import gettext
 from time import sleep
 
 # i18n
 gettext.install('tuquitup', '/usr/share/tuquito/locale')
 
 class MessageDialog:
-	def __init__(self, title, message, style):
-		self.title = title
-		self.message = message
-		self.style = style
+    def __init__(self, title, message, style):
+        self.title = title
+        self.message = message
+        self.style = style
 
-	def show(self):
-		dialog = gtk.MessageDialog(None, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, self.style, gtk.BUTTONS_OK, self.message)
-		dialog.set_icon_from_file('/usr/lib/tuquito/tuquitup/logo.png')
-		dialog.set_title(_('TuquitUP'))
-		dialog.set_position(gtk.WIN_POS_CENTER)
-		dialog.run()
-		dialog.destroy()
+    def show(self):
+        dialog = gtk.MessageDialog(None, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, self.style, gtk.BUTTONS_OK, self.message)
+        dialog.set_icon_from_file('/usr/lib/tuquito/tuquitup/logo.png')
+        dialog.set_title(_('TuquitUP'))
+        dialog.set_position(gtk.WIN_POS_CENTER)
+        dialog.run()
+        dialog.destroy()
 
 class mainWindow(threading.Thread):
-	def __init__(self, glade, socketId):
-		threading.Thread.__init__(self)
-		self.glade = glade
-		self.socketId = socketId
-		self.quit = False
-		self.window = self.glade.get_object('window')
-		self.pb = self.glade.get_object('progressbar')
-		self.glade.get_object('window').connect('delete-event', self.quitStop)
-		self.window.show()
+    def __init__(self, glade, socketId):
+        threading.Thread.__init__(self)
+        self.glade = glade
+        self.socketId = socketId
+        self.quit = False
+        self.window = self.glade.get_object('window')
+        self.pb = self.glade.get_object('progressbar')
+        self.glade.get_object('window').connect('delete-event', self.quitStop)
+        self.window.show()
 
-	def run(self):
-		try:
-			myEdition = commands.getoutput('cat /etc/tuquito/info | grep EDITION').split('=')[1].replace('"', '')
-			self.newThread(self.pulse)
-			gtk.gdk.threads_enter()
-			self.glade.get_object('window').window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
-			self.glade.get_object('image1').set_from_stock(gtk.STOCK_REFRESH,4)
-			self.pb.set_text('0/8')
-			gtk.gdk.threads_leave()
+    def run(self):
+        try:
+            myEdition = commands.getoutput('grep EDITION /etc/tuquito/info').split('=')[1].replace('"', '')
+            self.newThread(self.pulse)
+            gtk.gdk.threads_enter()
+            self.glade.get_object('window').window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
+            self.glade.get_object('image1').set_from_stock(gtk.STOCK_REFRESH,4)
+            self.pb.set_text('0/8')
+            gtk.gdk.threads_leave()
 
-			#Step 1 Backup overwritten files
-			if os.path.exists('/etc/apt/sources.list'):
-				os.system('gksu cp /etc/apt/sources.list /etc/apt/sources.list.tqt4')
-			if os.path.exists('/etc/apt/preferences'):
-				os.system('gksu cp /etc/apt/preferences /etc/apt/preferences.tqt4')
-			if os.path.exists('/etc/apt/apt.conf'):
-				os.system('gksu cp /etc/apt/apt.conf /etc/apt/apt.conf.tqt4')
+            #Step 1 Backup overwritten files
+            if os.path.exists('/etc/apt/preferences'):
+                os.system('gksu cp /etc/apt/preferences /etc/apt/preferences.tqt-backup')
+            if os.path.exists('/etc/apt/apt.conf'):
+                os.system('gksu cp /etc/apt/apt.conf /etc/apt/apt.conf.tqt-backup')
+            os.system('gksu cp /usr/lib/tuquito/tuquitup/preferences /etc/apt/preferences')
+            os.system('gksu cp /usr/lib/tuquito/tuquitup/apt.conf /etc/apt/apt.conf')
 
-			gtk.gdk.threads_enter()
-			self.glade.get_object('image1').set_from_stock(gtk.STOCK_YES,4)
-			self.glade.get_object('image2').set_from_stock(gtk.STOCK_REFRESH,4)
-			self.pb.set_text('1/8')
-			gtk.gdk.threads_leave()
+            gtk.gdk.threads_enter()
+            self.glade.get_object('image1').set_from_stock(gtk.STOCK_YES,4)
+            self.glade.get_object('image2').set_from_stock(gtk.STOCK_REFRESH,4)
+            self.pb.set_text('1/8')
+            gtk.gdk.threads_leave()
 
-			#Step 2 Upgrade Ubuntu base
-			if myEdition == 'LXDE':
-				os.system('gksu cp /usr/lib/tuquito/tuquitup/sources-lxde.list /etc/apt/sources.list')
-			else:
-				os.system('gksu cp /usr/lib/tuquito/tuquitup/sources.list /etc/apt/sources.list')
-			os.system('gksu cp /usr/lib/tuquito/tuquitup/preferences /etc/apt/preferences')
-			os.system('gksu cp /usr/lib/tuquito/tuquitup/apt.conf /etc/apt/apt.conf')
-			os.system('gksu "synaptic --non-interactive --hide-main-window --update-at-startup --upgrade-mode --parent-window-id ' + self.socketId + '" -D "TuquitUP"')
+            #Step 2 Upgrade system base
+            if myEdition == 'LXDE':
+                os.system('gksu cp /usr/lib/tuquito/tuquitup/sources/sources-lxde.list /etc/apt/sources.list')
+            elif myEdition == 'Debian':
+                os.system('gksu cp /usr/lib/tuquito/tuquitup/sources/sources-debian.list /etc/apt/sources.list')
+            else:
+                os.system('gksu cp /usr/lib/tuquito/tuquitup/sources/sources.list /etc/apt/sources.list')
+            os.system('gksu /usr/lib/tuquito/tuquitup/sources.sh %s' % myEdition)
+            os.system('gksu "synaptic --non-interactive --hide-main-window --update-at-startup --upgrade-mode --parent-window-id ' + self.socketId + '" -D "%s"' % _('TuquitUP'))
 
-			gtk.gdk.threads_enter()
-			self.glade.get_object('image2').set_from_stock(gtk.STOCK_YES,4)
-			self.glade.get_object('image3').set_from_stock(gtk.STOCK_REFRESH,4)
-			self.pb.set_text('2/8')
-			gtk.gdk.threads_leave()
+            gtk.gdk.threads_enter()
+            self.glade.get_object('image2').set_from_stock(gtk.STOCK_YES,4)
+            self.glade.get_object('image3').set_from_stock(gtk.STOCK_REFRESH,4)
+            self.pb.set_text('2/8')
+            gtk.gdk.threads_leave()
 
-			#Step 3 Install additional tuquito packages
-			if myEdition == 'LXDE':
-				desktopBase = commands.getoutput('dpkg --get-selections | grep install | cut -f1 | egrep -x "tuquito-desktop-lxde-base"')
-				desktopMain = commands.getoutput('dpkg --get-selections | grep install | cut -f1 | egrep -x "tuquito-desktop-lxde"')
-				desktopB = 'tuquito-desktop-lxde-base'
-				desktopM = 'tuquito-desktop-lxde'
-			else:
-				desktopBase = commands.getoutput('dpkg --get-selections | grep install | cut -f1 | egrep -x "tuquito-desktop-base"')
-				desktopMain = commands.getoutput('dpkg --get-selections | grep install | cut -f1 | egrep -x "tuquito-desktop-main"')
-				desktopB = 'tuquito-desktop-base'
-				desktopM = 'tuquito-desktop-main'
-			if desktopBase == '' or desktopMain == '':
-				os.system('gksu "echo ' + desktopB + ' >> /usr/lib/tuquito/tuquitup/additional.list"')
-				os.system('gksu "echo ' + desktopM + ' >> /usr/lib/tuquito/tuquitup/additional.list"')
-			os.system('gksu "synaptic --non-interactive --hide-main-window --set-selections-file /usr/lib/tuquito/tuquitup/additional.list --parent-window-id ' + self.socketId + '" -D "TuquitUP"')
-			os.system('gksu "synaptic --non-interactive --hide-main-window --update-at-startup --parent-window-id ' + self.socketId + '" -D "TuquitUP"')
+            #Step 3 Install additional tuquito packages
+            if myEdition == 'LXDE':
+                desktopB = 'tuquito-desktop-lxde-base'
+                desktopM = 'tuquito-desktop-lxde'
+            else:
+                desktopB = 'tuquito-desktop-base'
+                desktopM = 'tuquito-desktop-main'
+            desktopBase = commands.getoutput('dpkg --get-selections | grep install | cut -f1 | egrep -x "%s"' % desktopB)
+            desktopMain = commands.getoutput('dpkg --get-selections | grep install | cut -f1 | egrep -x "%s"' % desktopM)
+            if desktopBase == '' or desktopMain == '':
+                os.system('gksu "echo ' + desktopB + ' >> /usr/lib/tuquito/tuquitup/additional.list"')
+                os.system('gksu "echo ' + desktopM + ' >> /usr/lib/tuquito/tuquitup/additional.list"')
+            os.system('gksu "synaptic --non-interactive --hide-main-window --set-selections-file /usr/lib/tuquito/tuquitup/additional.list --parent-window-id ' + self.socketId + '" -D "%s"' % _('TuquitUP'))
+            os.system('gksu "synaptic --non-interactive --hide-main-window --update-at-startup --parent-window-id ' + self.socketId + '" -D "%s"' % _('TuquitUP'))
 
-			gtk.gdk.threads_enter()
-			self.glade.get_object('image3').set_from_stock(gtk.STOCK_YES,4)
-			self.glade.get_object('image4').set_from_stock(gtk.STOCK_REFRESH,4)
-			self.pb.set_text('3/8')
-			gtk.gdk.threads_leave()
+            gtk.gdk.threads_enter()
+            self.glade.get_object('image3').set_from_stock(gtk.STOCK_YES,4)
+            self.glade.get_object('image4').set_from_stock(gtk.STOCK_REFRESH,4)
+            self.pb.set_text('3/8')
+            gtk.gdk.threads_leave()
 
-			#Step 4 Dist-Upgrade
-			os.system('gksu "synaptic --non-interactive --hide-main-window --update-at-startup --dist-upgrade-mode --parent-window-id ' + self.socketId + '" -D "TuquitUP"')
+            #Step 4 Dist-Upgrade
+            os.system('gksu "synaptic --non-interactive --hide-main-window --update-at-startup --dist-upgrade-mode --parent-window-id ' + self.socketId + '" -D "%s"' % _('TuquitUP'))
 
-			gtk.gdk.threads_enter()
-			self.glade.get_object('image4').set_from_stock(gtk.STOCK_YES,4)
-			self.glade.get_object('image5').set_from_stock(gtk.STOCK_REFRESH,4)
-			self.pb.set_text('4/8')
-			gtk.gdk.threads_leave()
+            gtk.gdk.threads_enter()
+            self.glade.get_object('image4').set_from_stock(gtk.STOCK_YES,4)
+            self.glade.get_object('image5').set_from_stock(gtk.STOCK_REFRESH,4)
+            self.pb.set_text('4/8')
+            gtk.gdk.threads_leave()
 
-			#Step 5 Ensure upgrade and dist-upgrade
-			os.system('gksu "synaptic --non-interactive --hide-main-window --update-at-startup --upgrade-mode --parent-window-id ' + self.socketId + '" -D "TuquitUP"')
-			os.system('gksu "synaptic --non-interactive --hide-main-window --update-at-startup --dist-upgrade-mode --parent-window-id ' + self.socketId + '" -D "TuquitUP"')
+            #Step 5 Ensure upgrade and dist-upgrade
+            os.system('gksu "synaptic --non-interactive --hide-main-window --update-at-startup --upgrade-mode --parent-window-id ' + self.socketId + '" -D "%s"' % _('TuquitUP'))
+            os.system('gksu "synaptic --non-interactive --hide-main-window --update-at-startup --dist-upgrade-mode --parent-window-id ' + self.socketId + '" -D "%s"' % _('TuquitUP'))
 
-			gtk.gdk.threads_enter()
-			self.glade.get_object('image5').set_from_stock(gtk.STOCK_YES,4)
-			self.glade.get_object('image6').set_from_stock(gtk.STOCK_REFRESH,4)
-			self.pb.set_text('5/8')
-			gtk.gdk.threads_leave()
+            gtk.gdk.threads_enter()
+            self.glade.get_object('image5').set_from_stock(gtk.STOCK_YES,4)
+            self.glade.get_object('image6').set_from_stock(gtk.STOCK_REFRESH,4)
+            self.pb.set_text('5/8')
+            gtk.gdk.threads_leave()
 
-			#Step 6 Adjust filesystem changes
-			os.system('gksu /usr/lib/tuquito/tuquitup/adjust.sh')
+            #Step 6 Adjust filesystem changes
+            os.system('gksu /usr/lib/tuquito/tuquitup/adjust.sh %s' % myEdition)
 
-			gtk.gdk.threads_enter()
-			self.glade.get_object('image6').set_from_stock(gtk.STOCK_YES,4)
-			self.glade.get_object('image7').set_from_stock(gtk.STOCK_REFRESH,4)
-			self.pb.set_text('6/8')
-			gtk.gdk.threads_leave()
+            gtk.gdk.threads_enter()
+            self.glade.get_object('image6').set_from_stock(gtk.STOCK_YES,4)
+            self.glade.get_object('image7').set_from_stock(gtk.STOCK_REFRESH,4)
+            self.pb.set_text('6/8')
+            gtk.gdk.threads_leave()
 
-			#Step 7 configure gconf
-			if myEdition != 'LXDE':
-				os.system('gksu /usr/lib/tuquito/tuquitup/gconf.sh')
+            #Step 7 configure gconf
+            if myEdition != 'LXDE':
+                os.system('gksu /usr/lib/tuquito/tuquitup/gconf.sh')
 
-			gtk.gdk.threads_enter()
-			self.glade.get_object('image7').set_from_stock(gtk.STOCK_YES,4)
-			self.glade.get_object('image8').set_from_stock(gtk.STOCK_REFRESH,4)
-			self.pb.set_text('7/8')
-			gtk.gdk.threads_leave()
+            gtk.gdk.threads_enter()
+            self.glade.get_object('image7').set_from_stock(gtk.STOCK_YES,4)
+            self.glade.get_object('image8').set_from_stock(gtk.STOCK_REFRESH,4)
+            self.pb.set_text('7/8')
+            gtk.gdk.threads_leave()
 
-			#Step 8 Cleaning up
-			os.system('gksu /usr/lib/tuquito/tuquitup/cleanup.sh')
+            #Step 8 Cleaning up
+            os.system('gksu /usr/lib/tuquito/tuquitup/cleanup.sh')
 
-			gtk.gdk.threads_enter()
-			self.glade.get_object('image8').set_from_stock(gtk.STOCK_YES,4)
-			self.glade.get_object('window').window.set_cursor(None)
-			self.pb.set_text('8/8')
-			gtk.gdk.threads_leave()
+            gtk.gdk.threads_enter()
+            self.glade.get_object('image8').set_from_stock(gtk.STOCK_YES,4)
+            self.glade.get_object('window').window.set_cursor(None)
+            self.pb.set_text('8/8')
+            gtk.gdk.threads_leave()
 
-			self.quit = True
+            self.quit = True
 
-			gtk.gdk.threads_enter()
-			message = MessageDialog(_('Upgrade finished'), _("The upgrade process is finished, please reboot your computer. If you've seen error messages you can run this tool again or seek help from the forums."), gtk.MESSAGE_INFO)
-	    		message.show()
-			gtk.gdk.threads_leave()
+            gtk.gdk.threads_enter()
+            message = MessageDialog(_('Upgrade finished'), _("The upgrade process is finished, please reboot your computer. If you've seen error messages you can run this tool again or seek help from the forums."), gtk.MESSAGE_INFO)
+                message.show()
+            gtk.gdk.threads_leave()
 
-			self.quitStop(self)
-		except Exception, detail:
-			self.quit = True
-			msg = MessageDialog(_('Error'), _('An error occurred during the upgrade: ') + str(detail), gtk.MESSAGE_ERROR)
-	    		msg.show()
+            self.quitStop(self)
+        except Exception, detail:
+            self.quit = True
+            msg = MessageDialog(_('Error'), _('An error occurred during the upgrade: ') + str(detail), gtk.MESSAGE_ERROR)
+                msg.show()
 
-	def pulse(self):
-		while not self.quit:
-			sleep(0.05)
-			gtk.gdk.threads_enter()
-			self.pb.pulse()
-			gtk.gdk.threads_leave()
-		self.pb.set_fraction(1.0)
+    def pulse(self):
+        while not self.quit:
+            sleep(0.05)
+            gtk.gdk.threads_enter()
+            self.pb.pulse()
+            gtk.gdk.threads_leave()
+        self.pb.set_fraction(1.0)
 
-	def quitStop(self, widget, data=None):
-		if self.quit:
-			gtk.main_quit()
-		return True
+    def quitStop(self, widget, data=None):
+        if self.quit:
+            gtk.main_quit()
+        return True
 
-	def newThread(self, method):
-		t = threading.Thread(target=method, args=())
-		t.start()
+    def newThread(self, method):
+        t = threading.Thread(target=method, args=())
+        t.start()
 
 class warningWindow:
-	def __init__(self):
-		self.glade = gtk.Builder()
-		self.glade.add_from_file('/usr/lib/tuquito/tuquitup/tuquitup.glade')
-		self.vbox = self.glade.get_object('vbox1')
-		self.glade.get_object('warning').connect('destroy', gtk.main_quit)
-		self.glade.get_object('cancel').connect('clicked', gtk.main_quit)
-		self.glade.get_object('ok').connect('clicked', self.confirm)
-		self.glade.get_object('warning').set_markup('<big><b>' + _('Read this first:') + '</b></big>')
+    def __init__(self):
+        self.glade = gtk.Builder()
+        self.glade.add_from_file('/usr/lib/tuquito/tuquitup/tuquitup.glade')
+        self.vbox = self.glade.get_object('vbox1')
+        self.glade.get_object('warning').connect('destroy', gtk.main_quit)
+        self.glade.get_object('cancel').connect('clicked', gtk.main_quit)
+        self.glade.get_object('ok').connect('clicked', self.confirm)
+        self.glade.get_object('warning').set_markup('<big><b>' + _('Read this first:') + '</b></big>')
 
-		self.glade.get_object('warning').format_secondary_markup(_("The recommended way to install Tuquito 4.1 is to download the ISO and to perform a fresh install.\nThis tool allows you to upgrade an already installed Tuquito 4 system to Tuquito 4.1 (alpha). It is <b>risky</b> and depending on your configuration it might or <b>might not work</b>.\nBackup your data.\nGood luck and if you make it all the way, enjoy <b>Tuquito 4.1 Wichi</b>!"))
-		self.glade.get_object('warning').set_title('TuquitUP')
+        self.glade.get_object('warning').format_secondary_markup(_("The recommended way to install Tuquito 4.1 is to download the ISO and to perform a fresh install.\nThis tool allows you to upgrade an already installed system to new version avaiable of Tuquito. It is <b>risky</b> and depending on your configuration it might or <b>might not work</b>.\nBackup your data.\nGood luck and if you make it all the way, enjoy <b>Tuquito 4.1 Wichi</b>!"))
+        self.glade.get_object('warning').set_title('TuquitUP')
 
-		#i18n
-		self.glade.get_object('label9').set_label(_("It's ok, I know what I'm doing!"))
-		self.glade.get_object('label1').set_label('1. ' + _('Making backups of the files which will be overwritten'))
-		self.glade.get_object('label2').set_label('2. ' + _('Upgrading base'))
-		self.glade.get_object('label3').set_label('3. ' + _('Installing additional packages'))
-		self.glade.get_object('label4').set_label('4. ' + _('Performing an APT dist-upgrade'))
-		self.glade.get_object('label5').set_label('5. ' + _('Ensuring all upgrades are applied'))
-		self.glade.get_object('label6').set_label('6. ' + _('Adjusting post-upgrade system'))
-		self.glade.get_object('label7').set_label('7. ' + _('Configuring GConf'))
-		self.glade.get_object('label8').set_label('8. ' + _('Cleaning up'))
+        #i18n
+        self.glade.get_object('label9').set_label(_("It's ok, I know what I'm doing!"))
+        self.glade.get_object('label1').set_label('1. ' + _('Making backups of the files which will be overwritten'))
+        self.glade.get_object('label2').set_label('2. ' + _('Upgrading base'))
+        self.glade.get_object('label3').set_label('3. ' + _('Installing additional packages'))
+        self.glade.get_object('label4').set_label('4. ' + _('Performing an APT dist-upgrade'))
+        self.glade.get_object('label5').set_label('5. ' + _('Ensuring all upgrades are applied'))
+        self.glade.get_object('label6').set_label('6. ' + _('Adjusting post-upgrade system'))
+        self.glade.get_object('label7').set_label('7. ' + _('Configuring'))
+        self.glade.get_object('label8').set_label('8. ' + _('Cleaning up'))
 
-	def confirm(self, widget):
-		self.glade.get_object('warning').hide()
-		socket = gtk.Socket()
-		self.vbox.pack_start(socket)
-		socket.show()
-		self.socketId = repr(socket.get_id())
-		upgrade = mainWindow(self.glade, self.socketId)
-		upgrade.start()
+    def confirm(self, widget):
+        self.glade.get_object('warning').hide()
+        socket = gtk.Socket()
+        self.vbox.pack_start(socket)
+        socket.show()
+        self.socketId = repr(socket.get_id())
+        upgrade = mainWindow(self.glade, self.socketId)
+        upgrade.start()
 
 if __name__ == '__main__':
-	gtk.gdk.threads_init()
-	gui = warningWindow()
-	gtk.main()
-
+    gtk.gdk.threads_init()
+    gui = warningWindow()
+    gtk.main()

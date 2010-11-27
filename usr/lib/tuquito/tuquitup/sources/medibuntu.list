@@ -1,0 +1,2 @@
+deb http://packages.medibuntu.org/ maverick free non-free #Medibuntu
+#deb-src http://packages.medibuntu.org/ maverick free non-free #Medibuntu (source)
