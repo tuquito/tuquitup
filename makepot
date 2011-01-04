@@ -1,3 +1,5 @@
 #!/bin/bash
-
 xgettext --language=Python --keyword=_ --output=po/tuquitup.pot usr/lib/tuquito/tuquitup/tuquitup
+cd po
+msgmerge es.po tuquitup.pot -o es.po
+msgmerge pt_BR.po tuquitup.pot -o pt_BR.po

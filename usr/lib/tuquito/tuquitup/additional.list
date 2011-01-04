@@ -1,5 +1,10 @@
-tuquito-gnome-themes	deinstall
-software-center		deinstall
-tuquito-minimal		install
-tuquito-control-center	install
+tuquito-gnome-themes        deinstall
+tuquito-gnome-icons         deinstall
+software-center             deinstall
+tuquito-lxde-livecd         deinstall
+ubiquity                    deinstall
+tuquito-firmware            deinstall
+tuquito-minimal             install
+tuquito-control-center	    install
 tuquito-software-manager	install
+tuquito-apps-icons	        install

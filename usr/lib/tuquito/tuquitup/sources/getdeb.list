@@ -1,0 +1,2 @@
+#deb http://archive.getdeb.net/ubuntu maverick-getdeb apps #GetDeb
+#deb http://archive.getdeb.net/ubuntu maverick-getdeb games #PlayDeb
